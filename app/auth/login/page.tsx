@@ -1,9 +1,6 @@
-export default function LoginPage() {
-	return (
-		<div>
-			<input type='text' />
-			<input type='password' />
-			<button>Login</button>
-		</div>
-	);
-}
+import { LoginForm } from '@/components/auth/login-form';
+
+const LoginPage = () => {
+	return <LoginForm />;
+};
+export default LoginPage;

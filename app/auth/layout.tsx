@@ -1,10 +1,8 @@
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className=''>
-			<nav className='bg-red-500 text-white'>
-				This is the auth layout. You can put a navbar here.
-			</nav>
-			<div>{children}</div>
+		<div className='h-full flex justify-center items-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))]  from-sky-400 to-blue-800'>
+			{children}
 		</div>
 	);
 };
+export default AuthLayout;
