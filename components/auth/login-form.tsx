@@ -17,9 +17,16 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form';
+import { FormError } from '../form-error';
+import { FormSuccess } from '../form-success';
+import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
 export const LoginForm = () => {
+	const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+		console.log(values);
+	};
+
 	const form = useForm<z.infer<typeof LoginSchema>>({
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
@@ -36,7 +43,7 @@ export const LoginForm = () => {
 			showSocial
 		>
 			<Form {...form}>
-				<form className='space-y-6' onSubmit={form.handleSubmit(() => {})}>
+				<form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
 					<div className='space-y-4'>
 						<FormField
 							control={form.control}
@@ -55,7 +62,25 @@ export const LoginForm = () => {
 								</FormItem>
 							)}
 						/>
+						<FormField
+							control={form.control}
+							name='password'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder='******' type='password' />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 					</div>
+					<FormError message='' />
+					<FormSuccess message='' />
+					<Button type='submit' className='w-full'>
+						Login
+					</Button>
 				</form>
 			</Form>
 		</CardWrapper>
