@@ -1,20 +1,11 @@
 export const publicRoutes = ['/'];
 
 /**
- * Defines the authentication routes. Which will be redirected to the default login redirect path if the user is already logged in.
+ * Array of authentication routes.
+ * @type {string[]}
  */
-export const authRoutes = [
-	'/api/auth/signin',
+export const authRoutes = ['/auth/login', '/auth/register'];
 
-	// '/api/auth/callback/credentials',
-];
+export const apiAuthPrefix = '/api/auth';
 
-/**
- * The prefix for API authentication routes.
- */
-export const apiAuthPrefix = '/api/auth/';
-
-/**
- * The default login redirect path.
- */
-export const DEFAULT_LOGIN_REDIRECT = '/SecuredPage';
+export const DEFAULT_LOGIN_REDIRECT = '/settings';
