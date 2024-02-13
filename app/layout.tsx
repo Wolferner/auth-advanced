@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import { db } from '@/lib/db';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -15,6 +16,8 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	// const session = await auth()
+	// session?.user.
 	return (
 		<html lang='en'>
 			<body className={inter.className}>{children}</body>
