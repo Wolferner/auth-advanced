@@ -1,1 +1,1 @@
-// export { GET, POST } from '../../../../ak';
+export { GET, POST } from '../../../../auth';
