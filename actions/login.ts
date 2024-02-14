@@ -33,4 +33,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 		}
 		throw error;
 	}
+	if (validatedFields.success) {
+		return { success: 'Logged in!' };
+	}
 };

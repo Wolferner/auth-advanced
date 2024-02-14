@@ -33,10 +33,13 @@ export const LoginForm = () => {
 		setError('');
 		setSuccess('');
 
-		//FIXME: This is a workaround for the issue with useTransition
-		login(values).then(data => {
-			setError(data.error);
-			setSuccess(data.success);
+		startTransition(() => {
+			login(values).then(data => {
+				if (data) {
+					setError(data.error);
+					setSuccess(data.success);
+				}
+			});
 		});
 	};
 
