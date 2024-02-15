@@ -15,6 +15,8 @@ export const NewVerificationForm = () => {
 	const token = searchParams.get('token');
 
 	const onSubmit = useCallback(() => {
+		if (success || error) return;
+
 		if (!token) {
 			setError('Missing token');
 			return;
@@ -27,7 +29,7 @@ export const NewVerificationForm = () => {
 			.catch(error => {
 				setError('Something go wrong');
 			});
-	}, [token]);
+	}, [token, success, error]);
 
 	useEffect(() => {
 		onSubmit();
@@ -42,7 +44,7 @@ export const NewVerificationForm = () => {
 			<div className='flex items-center w-full justify-center'>
 				{!success && !error && <BeatLoader />}
 				<FormSuccess message={success} />
-				<FormError message={error} />
+				{!success && <FormError message={error} />}
 			</div>
 		</CardWrapper>
 	);
