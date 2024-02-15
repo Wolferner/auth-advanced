@@ -81,7 +81,10 @@ export const {
 			if (!existingUser) return token;
 
 			token.role = existingUser.role;
+			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+
 			console.log('jwt token', token);
+
 			return token;
 		},
 
@@ -91,6 +94,9 @@ export const {
 			}
 			if (token.role && session.user) {
 				session.user.role = token.role as UserRole;
+			}
+			if (session.user) {
+				session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
 			}
 			console.log('session', session);
 			return session;
