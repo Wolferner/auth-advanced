@@ -4,8 +4,11 @@ import * as z from 'zod';
 
 import { signIn } from '@/auth';
 import { getUserByEmail } from '@/data/user';
-import { sendVerificationEmail } from '@/lib/mail';
-import { generateVerificationToken } from '@/lib/tokens';
+import { sendTwoFactorEmail, sendVerificationEmail } from '@/lib/mail';
+import {
+	generateTwoFactorToken,
+	generateVerificationToken,
+} from '@/lib/tokens';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { LoginSchema } from '@/schemas';
 import { AuthError } from 'next-auth';
@@ -17,7 +20,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 		return { error: 'invalid fields!' };
 	}
 
-	const { email, password } = validatedFields.data;
+	const { email, password, code } = validatedFields.data;
 
 	const existingUser = await getUserByEmail(email);
 	if (!existingUser || !existingUser.email || !existingUser.password) {
@@ -33,6 +36,18 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 			verificationToken.token
 		);
 		return { success: 'Confirmation email sent!' };
+	}
+
+	if (existingUser.isTwoFactorEnabled && existingUser.email) {
+		if (code) {
+			//TODO: Check if code is valid
+		} else {
+			const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+
+			await sendTwoFactorEmail(twoFactorToken.email, twoFactorToken.token);
+
+			return { twoFactor: true };
+		}
 	}
 
 	try {
