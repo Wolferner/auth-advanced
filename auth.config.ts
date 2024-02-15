@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import type { NextAuthConfig, User } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';

@@ -24,10 +24,10 @@ import { db } from './lib/db';
 // }
 
 export const {
-	handlers: { GET, POST },
 	auth,
 	signIn,
 	signOut,
+	handlers: { GET, POST },
 } = NextAuth({
 	pages: {
 		signIn: '/auth/login',
