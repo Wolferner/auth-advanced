@@ -1,7 +1,9 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { UserRole } from '@prisma/client';
 import NextAuth, { type DefaultSession } from 'next-auth';
+import { FaLaptopHouse } from 'react-icons/fa';
 import authConfig from './auth.config';
+import { getTwoFactorConfirmationByUserId } from './data/teo-factor-confirmation';
 import { getUserById } from './data/user';
 import { db } from './lib/db';
 
@@ -46,13 +48,28 @@ export const {
 		async signIn({ user, account }) {
 			//Allow OAuth without email verification
 			if (account?.provider !== 'credentials') return true;
-			//Prevent Sign In without Email verification
-			if (user && user.id) {
-				const existingUser = await getUserById(user.id);
-				if (!existingUser?.emailVerified) return false;
-			}
 
-			//TODO: Add 2FA check
+			if (!user || !user.id) return false;
+
+			//Prevent Sign In without Email verification
+			const existingUser = await getUserById(user.id);
+			if (!existingUser?.emailVerified) return false;
+
+			//2FA check
+			if (existingUser.isTwoFactorEnabled) {
+				const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+					existingUser.id
+				);
+
+				if (!twoFactorConfirmation) return false;
+
+				//Delete 2FA confirmation for next sign in
+				await db.twoFactorConfirmation.delete({
+					where: {
+						id: twoFactorConfirmation.id,
+					},
+				});
+			}
 
 			return true;
 		},
