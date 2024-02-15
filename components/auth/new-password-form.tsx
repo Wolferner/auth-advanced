@@ -35,8 +35,8 @@ export const NewPasswordForm = () => {
 		startTransition(() => {
 			newPassword(values, token).then(data => {
 				if (data) {
-					setError(data?.error);
-					setSuccess(data?.success);
+					setError(data.error);
+					setSuccess(data.success);
 				}
 			});
 		});
@@ -45,7 +45,7 @@ export const NewPasswordForm = () => {
 	const form = useForm<z.infer<typeof NewPasswordSchema>>({
 		resolver: zodResolver(NewPasswordSchema),
 		defaultValues: {
-			email: '',
+			password: '',
 		},
 	});
 
