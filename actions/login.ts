@@ -3,7 +3,10 @@
 import * as z from 'zod';
 
 import { signIn } from '@/auth';
+import { getTwoFactorConfirmationByUserId } from '@/data/teo-factor-confirmation';
+import { getTwoFactorTokenByEmail } from '@/data/two-factor-token';
 import { getUserByEmail } from '@/data/user';
+import { db } from '@/lib/db';
 import { sendTwoFactorEmail, sendVerificationEmail } from '@/lib/mail';
 import {
 	generateTwoFactorToken,
@@ -40,7 +43,44 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
 	if (existingUser.isTwoFactorEnabled && existingUser.email) {
 		if (code) {
-			//TODO: Check if code is valid
+			const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
+
+			if (!twoFactorToken) {
+				return { error: 'Invalid code!' };
+			}
+
+			if (twoFactorToken.token !== code) {
+				return { error: 'Invalid code!' };
+			}
+
+			const hasExpires = new Date(twoFactorToken.expires) < new Date();
+			if (hasExpires) {
+				return { error: 'Code expired!' };
+			}
+
+			await db.twoFactorToken.delete({
+				where: {
+					id: twoFactorToken.id,
+				},
+			});
+
+			const existingConfirmation = await getTwoFactorConfirmationByUserId(
+				existingUser.id
+			);
+
+			if (existingConfirmation) {
+				await db.twoFactorConfirmation.delete({
+					where: {
+						id: existingConfirmation.id,
+					},
+				});
+			}
+
+			await db.twoFactorConfirmation.create({
+				data: {
+					userId: existingUser.id,
+				},
+			});
 		} else {
 			const twoFactorToken = await generateTwoFactorToken(existingUser.email);
 
