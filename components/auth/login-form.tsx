@@ -1,14 +1,5 @@
 'use client';
 
-import CardWrapper from './card-wrapper';
-
-import * as z from 'zod';
-
-import { LoginSchema } from '@/schemas';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-
 import { login } from '@/actions/login';
 import {
 	Form,
@@ -18,13 +9,25 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form';
+import { LoginSchema } from '@/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 import { FormError } from '../form-error';
 import { FormSuccess } from '../form-success';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import CardWrapper from './card-wrapper';
 
 export const LoginForm = () => {
+	const searchParams = useSearchParams();
+	const urlError =
+		searchParams.get('error') === 'OAuthAccountNotLinked'
+			? 'Email already in use with other provider'
+			: '';
+
 	const [isPending, startTransition] = useTransition();
 	const [error, setError] = useState<string | undefined>('');
 	const [success, setSuccess] = useState<string | undefined>('');
@@ -32,7 +35,6 @@ export const LoginForm = () => {
 	const onSubmit = (values: z.infer<typeof LoginSchema>) => {
 		setError('');
 		setSuccess('');
-
 		startTransition(() => {
 			login(values).then(data => {
 				if (data) {
@@ -98,7 +100,7 @@ export const LoginForm = () => {
 							)}
 						/>
 					</div>
-					<FormError message={error} />
+					<FormError message={error || urlError} />
 					<FormSuccess message={success} />
 					<Button disabled={isPending} type='submit' className='w-full'>
 						Login

@@ -27,16 +27,21 @@ export const {
 	signIn,
 	signOut,
 } = NextAuth({
-	// events: {
-	// 	async linkAccount({ user }) {
-	// 		await db.user.update({
-	// 			where: { id: user.id },
-	// 			data: {
-	// 				emailVerified: new Date(),
-	// 			},
-	// 		});
-	// 	},
-	// },
+	pages: {
+		signIn: '/auth/login',
+		error: '/auth/error',
+	},
+
+	events: {
+		async linkAccount({ user }) {
+			await db.user.update({
+				where: { id: user.id },
+				data: {
+					emailVerified: new Date(),
+				},
+			});
+		},
+	},
 	callbacks: {
 		async jwt({ token }) {
 			if (!token.sub) return token;
