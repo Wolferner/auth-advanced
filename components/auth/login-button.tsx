@@ -6,15 +6,15 @@ import { LoginForm } from './login-form';
 
 interface LoginButtonProps {
 	children: React.ReactNode;
-	mode?: 'modal' | 'redirect';
-	asChild?: boolean;
+	mode: 'modal' | 'redirect';
+	// asChild?: boolean;
 }
 
 export const LoginButton = ({
 	children,
-	mode = 'redirect',
-	asChild = false,
-}: LoginButtonProps) => {
+	mode,
+}: // asChild = false,
+LoginButtonProps) => {
 	const router = useRouter();
 
 	const clickHandler = () => {
@@ -24,17 +24,19 @@ export const LoginButton = ({
 	if (mode === 'modal') {
 		return (
 			<Dialog>
-				<DialogTrigger asChild={asChild}>{children}</DialogTrigger>
+				<DialogTrigger asChild={true}>{children}</DialogTrigger>
 				<DialogContent className='p-0 w-auto bg-transparent border-none'>
 					<LoginForm />
 				</DialogContent>
 			</Dialog>
 		);
+	} else if (mode === 'redirect') {
+		return (
+			<span onClick={clickHandler} className='cursor-pointer'>
+				{children}
+			</span>
+		);
+	} else {
+		return <span>Invalid atribute - need set mode in login-button.tsx!</span>;
 	}
-
-	return (
-		<span onClick={clickHandler} className='cursor-pointer'>
-			{children}
-		</span>
-	);
 };
