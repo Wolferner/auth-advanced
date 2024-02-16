@@ -1,3 +1,4 @@
+import next from 'next';
 import NextAuth from 'next-auth';
 import authConfig from './auth.config';
 import {
@@ -29,7 +30,16 @@ export default auth(req => {
 	}
 
 	if (!isLoggedIn && !isPublicRoute) {
-		return Response.redirect(new URL('/auth/login', nextUrl));
+		// If the user try to get access to protected page and not logged in we save the url with query params and redirect to login page
+		let callbackUrl = nextUrl.pathname;
+		if (nextUrl.search) {
+			callbackUrl += nextUrl.search;
+		}
+		const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+
+		return Response.redirect(
+			new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+		);
 	}
 
 	return null;
