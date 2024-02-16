@@ -3,6 +3,7 @@ import { UserRole } from '@prisma/client';
 import NextAuth, { type DefaultSession } from 'next-auth';
 import { FaLaptopHouse } from 'react-icons/fa';
 import authConfig from './auth.config';
+import { getAccountByUserId } from './data/account';
 import { getTwoFactorConfirmationByUserId } from './data/teo-factor-confirmation';
 import { getUserById } from './data/user';
 import { db } from './lib/db';
@@ -80,6 +81,14 @@ export const {
 			const existingUser = await getUserById(token.sub);
 			if (!existingUser) return token;
 
+			//get account to check if user is 0Auth
+			const existingAccount = await getAccountByUserId(existingUser.id);
+
+			//add user info to jwt from db to implement changing user data
+			token.name = existingUser.name;
+			token.email = existingUser.email;
+
+			token.is0Auth = !!existingAccount;
 			token.role = existingUser.role;
 			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
@@ -98,7 +107,13 @@ export const {
 			if (session.user) {
 				session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
 			}
-			console.log('session', session);
+			// console.log('session', session);
+
+			if (session.user) {
+				session.user.name = token.name;
+				session.user.email = token.email as string;
+				session.user.is0Auth = token.is0Auth as boolean;
+			}
 			return session;
 		},
 	},
