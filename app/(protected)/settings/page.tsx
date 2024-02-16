@@ -27,7 +27,7 @@ import { useCurrentUser } from '@/hooks/use-current-user';
 import { SettingsSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserRole } from '@prisma/client';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -47,6 +47,7 @@ const SettingsPage = () => {
 			password: undefined,
 			newPassword: undefined,
 			role: user?.role || undefined,
+			isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
 		},
 	});
 
