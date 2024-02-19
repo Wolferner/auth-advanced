@@ -30,7 +30,7 @@ export const login = async (
 
 	const existingUser = await getUserByEmail(email);
 	if (!existingUser || !existingUser.email || !existingUser.password) {
-		return { error: 'Email does not exist !' };
+		return { error: 'Email or password is wrong !' };
 	}
 	// not allowed to sign in if email is not verified
 	if (!existingUser.emailVerified) {
@@ -49,11 +49,11 @@ export const login = async (
 			const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
 
 			if (!twoFactorToken) {
-				return { error: 'Invalid code!' };
+				return { error: '2FA fail - please contact admin !' };
 			}
 
 			if (twoFactorToken.token !== code) {
-				return { error: 'Invalid code!' };
+				return { error: '2FA fail - please contact admin !' };
 			}
 
 			const hasExpires = new Date(twoFactorToken.expires) < new Date();
@@ -102,10 +102,13 @@ export const login = async (
 	} catch (error) {
 		if (error instanceof AuthError) {
 			switch (error.type) {
+				// To check scenario when user is not found
 				case 'CredentialsSignin':
-					return { error: 'invalid credentials!' };
+					console.log(error.type);
+					return { error: 'wrong email or password!' };
 				default:
-					return { error: 'unknown error!' };
+					console.log(error.type);
+					return { error: 'Unexpected error!' };
 			}
 		}
 		throw error;
