@@ -47,7 +47,7 @@ export const {
 	},
 	callbacks: {
 		async signIn({ user, account }) {
-			//Allow OAuth without email verification
+			//Allow OAuth without email verification and 2FA check
 			if (account?.provider !== 'credentials') return true;
 
 			if (!user || !user.id) return false;
@@ -106,14 +106,12 @@ export const {
 			}
 			if (session.user) {
 				session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-			}
-			// console.log('session', session);
-
-			if (session.user) {
 				session.user.name = token.name;
 				session.user.email = token.email as string;
 				session.user.is0Auth = token.is0Auth as boolean;
 			}
+			// console.log('session', session);
+
 			return session;
 		},
 	},
