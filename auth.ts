@@ -48,14 +48,16 @@ export const {
 	},
 	callbacks: {
 		async signIn({ user, account }) {
-			// console.log('signIn - 1', user, account);
+			console.log('signIn - 1', user);
+			console.log('account', account);
+			debugger;
 			//Allow OAuth without email verification and 2FA check
 			if (account?.provider !== 'credentials') {
 				// console.log('signIn works');
 				return true;
 			}
 
-			if (!user || !user.id) return false;
+			// if (!user || !user.id) return false;
 
 			//Prevent Sign In without Email verification
 			const existingUser = await getUserById(user.id);
@@ -81,6 +83,7 @@ export const {
 		},
 		async jwt({ token }) {
 			// console.log('jwt token - 1', token);
+			debugger;
 			if (!token.sub) return token;
 
 			//TODO: Its posible to get user info with {user} argument in jwt function
@@ -104,6 +107,7 @@ export const {
 		},
 
 		async session({ session, token }) {
+			debugger;
 			if (token.sub && session.user) {
 				session.user.id = token.sub;
 			}

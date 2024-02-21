@@ -10,9 +10,12 @@ import { Button } from '../ui/button';
 const Social = () => {
 	const searchParams = useSearchParams();
 	const callbackUrl = searchParams.get('callbackUrl');
-
+	// debugger;
 	const onClick = (provider: 'google' | 'github') => {
-		signIn(provider, { callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT });
+		// debugger;
+		signIn(provider, {
+			callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+		});
 	};
 
 	return (
