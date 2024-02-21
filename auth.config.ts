@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import type { NextAuthConfig } from 'next-auth';
+import AzureADB2C from 'next-auth/providers/azure-ad-b2c';
 import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
@@ -35,5 +36,6 @@ export default {
 			clientId: process.env.GOOGLE_ID,
 			clientSecret: process.env.GOOGLE_SECRET,
 		}),
+		AzureADB2C({}),
 	],
 } satisfies NextAuthConfig;

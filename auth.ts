@@ -37,6 +37,7 @@ export const {
 
 	events: {
 		async linkAccount({ user }) {
+			console.log('linkAccount', user);
 			await db.user.update({
 				where: { id: user.id },
 				data: {
@@ -47,8 +48,12 @@ export const {
 	},
 	callbacks: {
 		async signIn({ user, account }) {
+			// console.log('signIn - 1', user, account);
 			//Allow OAuth without email verification and 2FA check
-			if (account?.provider !== 'credentials') return true;
+			if (account?.provider !== 'credentials') {
+				// console.log('signIn works');
+				return true;
+			}
 
 			if (!user || !user.id) return false;
 
@@ -75,6 +80,7 @@ export const {
 			return true;
 		},
 		async jwt({ token }) {
+			// console.log('jwt token - 1', token);
 			if (!token.sub) return token;
 
 			//TODO: Its posible to get user info with {user} argument in jwt function
@@ -92,7 +98,7 @@ export const {
 			token.role = existingUser.role;
 			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
-			console.log('jwt token', token);
+			// console.log('jwt token - 2', token);
 
 			return token;
 		},
@@ -119,5 +125,6 @@ export const {
 	session: {
 		strategy: 'jwt',
 	},
+	secret: process.env.NEXTAUTH_SECRET,
 	...authConfig,
 });
