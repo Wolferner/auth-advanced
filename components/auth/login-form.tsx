@@ -27,7 +27,7 @@ export const LoginForm = () => {
 	const callbackUrl = searchParams.get('callbackUrl');
 	const urlError =
 		searchParams.get('error') === 'OAuthAccountNotLinked'
-			? 'Email already in use with other provider2'
+			? 'Email already in use with other provider'
 			: '';
 
 	const [isPending, startTransition] = useTransition();
