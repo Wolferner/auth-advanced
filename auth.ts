@@ -97,7 +97,7 @@ export const {
 			token.name = existingUser.name;
 			token.email = existingUser.email;
 
-			token.is0Auth = !!existingAccount;
+			token.isOAuth = !!existingAccount;
 			token.role = existingUser.role;
 			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
@@ -118,7 +118,7 @@ export const {
 				session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
 				session.user.name = token.name;
 				session.user.email = token.email as string;
-				session.user.is0Auth = token.is0Auth as boolean;
+				session.user.isOAuth = token.isOAuth as boolean;
 			}
 			// console.log('session', session);
 
