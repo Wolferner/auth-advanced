@@ -125,7 +125,7 @@ export const {
 			return session;
 		},
 	},
-	adapter: PrismaAdapter(db),
+	adapter: PrismaAdapter(db) as any,
 	session: {
 		strategy: 'jwt',
 	},
