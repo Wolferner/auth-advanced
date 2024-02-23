@@ -40,7 +40,7 @@ export const {
 				return true;
 			}
 
-			// if (!user || !user.id) return false;
+			if (!user || !user.id) return false;
 
 			//Prevent Sign In without Email verification
 			const existingUser = await getUserById(user.id);
