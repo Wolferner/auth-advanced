@@ -1,7 +1,6 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { UserRole } from '@prisma/client';
 import NextAuth, { type DefaultSession } from 'next-auth';
-import { FaLaptopHouse } from 'react-icons/fa';
 import authConfig from './auth.config';
 import { getAccountByUserId } from './data/account';
 import { getTwoFactorConfirmationByUserId } from './data/teo-factor-confirmation';
