@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import type { NextAuthConfig } from 'next-auth';
+import AzureADB2C from 'next-auth/providers/azure-ad-b2c';
 import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
@@ -34,6 +35,15 @@ export default {
 		Google({
 			clientId: process.env.GOOGLE_ID,
 			clientSecret: process.env.GOOGLE_SECRET,
+		}),
+		AzureADB2C({
+			clientId: process.env.AZURE_AD_B2C_CLIENT_ID,
+			clientSecret: process.env.AZURE_AD_B2C_CLIENT_SECRET,
+			// issuer:
+			// 'https://testadvancedauth.b2clogin.com/testAdvancedAuth.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_signup_signin1',
+
+			tenantId: process.env.AZURE_AD_B2C_TENANT_ID,
+			primaryUserFlow: process.env.AZURE_AD_B2C_USER_FLOW,
 		}),
 	],
 } satisfies NextAuthConfig;

@@ -37,6 +37,7 @@ export const {
 
 	events: {
 		async linkAccount({ user }) {
+			console.log('linkAccount', user);
 			await db.user.update({
 				where: { id: user.id },
 				data: {
@@ -47,10 +48,16 @@ export const {
 	},
 	callbacks: {
 		async signIn({ user, account }) {
+			console.log('signIn - 1', user);
+			console.log('account', account);
+			// debugger;
 			//Allow OAuth without email verification and 2FA check
-			if (account?.provider !== 'credentials') return true;
+			if (account?.provider !== 'credentials') {
+				// console.log('signIn works');
+				return true;
+			}
 
-			if (!user || !user.id) return false;
+			// if (!user || !user.id) return false;
 
 			//Prevent Sign In without Email verification
 			const existingUser = await getUserById(user.id);
@@ -75,6 +82,8 @@ export const {
 			return true;
 		},
 		async jwt({ token }) {
+			console.log('jwt token - 1', token);
+			// debugger;
 			if (!token.sub) return token;
 
 			//TODO: Its posible to get user info with {user} argument in jwt function
@@ -88,16 +97,17 @@ export const {
 			token.name = existingUser.name;
 			token.email = existingUser.email;
 
-			token.is0Auth = !!existingAccount;
+			token.isOAuth = !!existingAccount;
 			token.role = existingUser.role;
 			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
-			console.log('jwt token', token);
+			// console.log('jwt token - 2', token);
 
 			return token;
 		},
 
 		async session({ session, token }) {
+			// debugger;
 			if (token.sub && session.user) {
 				session.user.id = token.sub;
 			}
@@ -108,16 +118,17 @@ export const {
 				session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
 				session.user.name = token.name;
 				session.user.email = token.email as string;
-				session.user.is0Auth = token.is0Auth as boolean;
+				session.user.isOAuth = token.isOAuth as boolean;
 			}
 			// console.log('session', session);
 
 			return session;
 		},
 	},
-	adapter: PrismaAdapter(db),
+	adapter: PrismaAdapter(db) as any,
 	session: {
 		strategy: 'jwt',
 	},
+	secret: process.env.NEXTAUTH_SECRET,
 	...authConfig,
 });

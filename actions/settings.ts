@@ -1,13 +1,13 @@
 'use server';
 
-import { getUserByEmail, getUserById } from '@/data/user'
-import { currentUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { sendVerificationEmail } from '@/lib/mail'
-import { generateVerificationToken } from '@/lib/tokens'
-import { SettingsSchema } from '@/schemas'
-import bcrypt from 'bcryptjs'
-import * as z from 'zod'
+import { getUserByEmail, getUserById } from '@/data/user';
+import { currentUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { sendVerificationEmail } from '@/lib/mail';
+import { generateVerificationToken } from '@/lib/tokens';
+import { SettingsSchema } from '@/schemas';
+import bcrypt from 'bcryptjs';
+import * as z from 'zod';
 
 export const settings = async (values: z.infer<typeof SettingsSchema>) => {
 	const user = await currentUser();
@@ -22,7 +22,7 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
 	}
 
 	// check if user is 0Auth than he cant change part of settings
-	if (user.is0Auth) {
+	if (user.isOAuth) {
 		values.email = undefined;
 		values.password = undefined;
 		values.newPassword = undefined;
