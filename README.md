@@ -24,10 +24,11 @@ This project demonstrates an advanced authentication setup using Next.js and Nex
 
 To get started with the project, clone the repository and install the dependencies:
 
-````bash
+```bash
 git clone https://github.com/your-username/auth-advanced.git
 cd auth-advanced
 npm install
+```
 
 ### Environment Variables
 
@@ -45,6 +46,7 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 NODE_ENV="development"
 NEXTAUTH_SECRET
 AUTH_SECRET
+```
 
 ### Running the Project
 
@@ -52,6 +54,7 @@ To run the project locally:
 
 ```bash
 npm run dev
+```
 
 ### Building for Production
 
@@ -60,6 +63,7 @@ To build the project for production:
 ```bash
 npm run build
 npm start
+```
 
 ### Project Structure
 
@@ -135,5 +139,6 @@ The project relies on the following key dependencies:
 - `cross-env`: ^7.0.3
 - `postcss`: ^8
 
+```
 
-````
+```
