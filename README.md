@@ -1,6 +1,7 @@
 # Auth Advanced
 
 This project demonstrates an advanced authentication setup using Next.js and NextAuth.js, along with a range of modern web development tools and libraries. The project features authentication flows, session management, and more, all integrated with Tailwind CSS for styling.
+https://www.youtube.com/watch?v=1MTyCvS05V4
 
 ## Features
 
@@ -138,7 +139,3 @@ The project relies on the following key dependencies:
 - `autoprefixer`: ^10.0.1
 - `cross-env`: ^7.0.3
 - `postcss`: ^8
-
-```
-
-```
